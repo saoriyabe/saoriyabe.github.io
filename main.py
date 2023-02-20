@@ -34,6 +34,13 @@ def divide_geojson_files(dir:str, filename:str, outdir:str, type:str):
 if __name__ == '__main__':
     #test()
 
+    """
     for num in range(1, 48):
         elementary_file = "A27-21_" + str(num).zfill(2) + ".geojson"
         divide_geojson_files("./geojson_elementary", elementary_file, "./geojson_elementary_each", "elementary")
+    """
+
+    for num in range(1, 48):
+        juniorhigh_file = "A32-21_" + str(num).zfill(2) + ".geojson"
+        divide_geojson_files("./geojson_juniorhigh", juniorhigh_file, "./geojson_juniorhigh_each", "juniorhigh")
+        
