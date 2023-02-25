@@ -15,17 +15,23 @@ class LazyDecoder(json.JSONDecoder):
 def test():
     print("test")
 
-def divide_geojson_files(dir:str, filename:str, outdir:str, type:str):
+def divide_geojson_files(dir:str, filename:str, outdir:str, schooltype:str):
     with open(dir + "/" + filename, 'r', encoding='utf-8') as geojson_f:
         geojson_load = json.load(geojson_f, cls=LazyDecoder)
         data = geojson_load["features"]
 
         for school in data:
             if school["type"] == "Feature":
-                if type == "elementary":
-                    new_filename =  filename.split(".")[0] + "_" + school["properties"]["A27_002"] + school["properties"]["A27_004"] + ".geojson"
-                elif type == "juniorhigh":
-                    new_filename = filename.split(".")[0] + "_" + school["properties"]["A32_002"] + school["properties"]["A32_004"] + ".geojson"
+                if schooltype == "elementary":
+                    if school["properties"]["A27_002"].endswith("立"):
+                        new_filename =  filename.split(".")[0] + "_" + school["properties"]["A27_002"] + school["properties"]["A27_004"] + ".geojson"
+                    else:
+                        new_filename =  filename.split(".")[0] + "_" + school["properties"]["A27_002"] + "立" + school["properties"]["A27_004"] + ".geojson"
+                elif schooltype == "juniorhigh":
+                    if school["properties"]["A32_002"].endswith("立"):
+                        new_filename = filename.split(".")[0] + "_" + school["properties"]["A32_002"] + school["properties"]["A32_004"] + ".geojson"
+                    else:
+                        new_filename = filename.split(".")[0] + "_" + school["properties"]["A32_002"] + "立" + school["properties"]["A32_004"] + ".geojson"
                 print(new_filename)
 
                 with open(outdir + "/" + new_filename, mode="w") as output_f:
@@ -34,13 +40,11 @@ def divide_geojson_files(dir:str, filename:str, outdir:str, type:str):
 if __name__ == '__main__':
     #test()
 
-    """
     for num in range(1, 48):
         elementary_file = "A27-21_" + str(num).zfill(2) + ".geojson"
         divide_geojson_files("./geojson_elementary", elementary_file, "./geojson_elementary_each", "elementary")
-    """
 
     for num in range(1, 48):
         juniorhigh_file = "A32-21_" + str(num).zfill(2) + ".geojson"
         divide_geojson_files("./geojson_juniorhigh", juniorhigh_file, "./geojson_juniorhigh_each", "juniorhigh")
-        
+
